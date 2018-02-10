@@ -12,7 +12,9 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -60,14 +62,34 @@ public class MainActivity extends AppCompatActivity {
                 StringBuffer buffer = new StringBuffer();
 
                 String line = "";
-
+                String result ="";
                 while ((line = reader.readLine()) != null) {
                     buffer.append(line);
                 }
-                return buffer.toString();
+
+                String finalJSON = buffer.toString();
+
+//                JSONObject parentObject = new JSONObject(finalJSON);
+//                JSONArray parentArray = parentObject.getJSONArray("items");
+//                int count = parentObject.getInt("count");
+//                for(int i =0;i<count;i++) {
+//                    JSONObject finalObject = parentArray.getJSONObject(i);
+//                    JSONObject childObject = new JSONObject(finalObject.getString("mainPhoto"));
+//
+//                    String title = finalObject.getString("title");
+//                    String imageUrl = childObject.getString("url");
+//
+//                    result+= title +"\n" + imageUrl +"\n";
+//                }
+                ArrayList<QuizField> quizFields = QuizField.makeQuizFields(finalJSON);
+
+                return quizFields.get(0).getTitle()+"\n"+quizFields.get(0).getImageUrl();
+
             } catch (MalformedURLException e) {
                 e.printStackTrace();
             } catch (IOException e) {
+                e.printStackTrace();
+            } catch (JSONException e) {
                 e.printStackTrace();
             } finally {
                 if (connection != null) {
@@ -82,7 +104,7 @@ public class MainActivity extends AppCompatActivity {
                 }
 
             }
-            return null;
+            return "Błąd";
         }
 
 

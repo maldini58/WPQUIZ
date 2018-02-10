@@ -12,29 +12,43 @@ import java.util.ArrayList;
 public class QuizField extends Object {
 
     String title;
-    String pictureURL;
+    String imageUrl;
 
-    public QuizField(JSONObject jsonObject) throws JSONException{
+    public QuizField(String title, String imageUrl) throws JSONException{
 
-        this.title= (String) jsonObject.optString("title","");
-//        this.pictureURL= (String) jsonObject.optString("mainphoto: url","");
+        this.title= title;
+        this.imageUrl= imageUrl;
 
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
     }
 
     public QuizField(){};
 
     public static ArrayList<QuizField> makeQuizFields (String fieldData) throws JSONException, NullPointerException{
         ArrayList<QuizField> quizFields = new ArrayList<QuizField>();
-        JSONObject data = new JSONObject(fieldData);
-        JSONObject count = data.optJSONObject("count");
-        JSONArray itemsArray = data.optJSONArray("items");
-        for(int i = 0; i < itemsArray.length(); i++) {
-            JSONObject photo=	(JSONObject) itemsArray.get(i);
-            QuizField currentField = new QuizField (photo);
-            quizFields.add(currentField);
+        JSONObject parentObject = new JSONObject(fieldData);
+        JSONArray itemsArray = parentObject.getJSONArray("items");
+        int count = parentObject.getInt("count");
+        for(int i=0;i<count;i++){
+            JSONObject itemObject = itemsArray.getJSONObject(i);
+            JSONObject photoObject = new JSONObject(itemObject.getString("mainPhoto"));
+
+            quizFields.add(new QuizField(itemObject.getString("title"),photoObject.getString("url")));
         }
+
         return quizFields;
     }
+
+
+
+
 
 
 
