@@ -22,6 +22,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 
@@ -50,11 +51,13 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // Create global configuration and initialize ImageLoader with this config
-        ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(this).build();
-        ImageLoader.getInstance().init(config);
+        // Create default options which will be used for every
+//  displayImage(...) call if no options will be passed to this method
+        DisplayImageOptions defaultOptions = new DisplayImageOptions.Builder().cacheInMemory(true).cacheOnDisk(true).build();
+        ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(getApplicationContext()).defaultDisplayImageOptions(defaultOptions).build();
+        ImageLoader.getInstance().init(config); // Do it on Application start
 
-    
+
 
         lsItem = (ListView)findViewById(R.id.lvItems);
 //        textView = (TextView)findViewById(R.id.textView);
@@ -63,58 +66,6 @@ public class MainActivity extends AppCompatActivity {
 
         }
 
-//    public class ItemAdapter extends BaseAdapter {
-//        Context mContext;
-//        ArrayList<QuizField>  mQuizField;
-//        LayoutInflater mInflater;
-//        public ItemAdapter(Context c, ArrayList<QuizField> quizField) {
-//            mContext = c;
-//            mQuizField = quizField;
-//            mInflater = (LayoutInflater) mContext.getSystemService(
-//                    Context.LAYOUT_INFLATER_SERVICE);
-//
-//        }
-//        public int getCount() {
-//            return  mQuizField.size();
-//        }
-//        public Object getItem(int position) {
-//            return mQuizField.get(position);
-//        }
-//        public long getItemId(int position) {
-//            return position;
-//        }
-//        public View getView(int position, View convertView, ViewGroup parent) {
-//            ViewHolder viewHolder;
-//            if (convertView == null) {
-//                convertView = mInflater.inflate(R.layout.item_layout, null);
-//                viewHolder = new ViewHolder();
-//                viewHolder.textViewTitle = (TextView) convertView.findViewById(R.id.textViewTitle);
-//                viewHolder.imageView = (ImageView)convertView.findViewById(R.id.imageView);
-//                viewHolder.textViewResult = (TextView) convertView.findViewById(R.id.textViewResult);
-//                convertView.setTag(viewHolder);
-//            } else {
-//                viewHolder = (ViewHolder) convertView.getTag();
-//            }
-//            convertView.setBackgroundColor(Color.LTGRAY);
-//            convertView.setBackgroundColor(Color.WHITE);
-//            QuizField currentQuizField = mQuizField.get(position);
-//            viewHolder.textViewTitle.setText(currentQuizField.title);
-//            viewHolder.textViewResult.setText("Wynik");
-////            URL newurl = new URL(currentQuizField.imageUrl);
-////            mIcon_val = BitmapFactory.decodeStream(newurl.openConnection().getInputStream());
-////            profile_photo.setImageBitmap(mIcon_val);
-//
-//
-//            return convertView;
-//        }
-//    }
-//
-//
-//    private static class ViewHolder {
-//        public TextView textViewTitle;
-//        public ImageView imageView;
-//        public TextView textViewResult;
-//    }
 
 
     public class JSONTask extends AsyncTask<String,String,List<ItemModel>>{
@@ -229,10 +180,12 @@ public class MainActivity extends AppCompatActivity {
             textViewResult = (TextView)convertView.findViewById(R.id.textViewResult);
             imageView = (ImageView)convertView.findViewById(R.id.imageView);
 
+            // Then later, when you want to display image
+            ImageLoader.getInstance().displayImage(itemModelList.get(position).getMainPhoto().getUrl(), imageView); // Default options will be used
+
             textViewTitle.setText(itemModelList.get(position).getTitle());
             textViewResult.setText(itemModelList.get(position).getMainPhoto().getUrl());
-//            imageView.setImageDrawable(LoadImageFromWebOperations(itemModelList.get(position).getMainPhoto().getUrl()));
-            imageView.setImageResource(R.drawable.theon);
+
 
             return convertView;
 
@@ -241,14 +194,6 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    public static Drawable LoadImageFromWebOperations(String url) {
-        try {
-            InputStream is = (InputStream) new URL(url).getContent();
-            Drawable d = Drawable.createFromStream(is, "src name");
-            return d;
-        } catch (Exception e) {
-            return null;
-        }
-    }
+  
 }
 
