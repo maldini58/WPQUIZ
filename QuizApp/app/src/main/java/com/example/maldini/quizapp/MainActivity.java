@@ -2,6 +2,7 @@ package com.example.maldini.quizapp;
 
 import android.app.FragmentTransaction;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
@@ -14,6 +15,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
@@ -25,6 +27,8 @@ import android.widget.Toast;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
+import com.nostra13.universalimageloader.core.assist.FailReason;
+import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -60,11 +64,20 @@ public class MainActivity extends AppCompatActivity {
 
 
         lsItem = (ListView)findViewById(R.id.lvItems);
+
 //        textView = (TextView)findViewById(R.id.textView);
-        new JSONTask().execute("http://quiz.o2.pl/api/v1/quizzes/0/100");
+
+            new JSONTask().execute("http://quiz.o2.pl/api/v1/quizzes/0/100");
 
 
         }
+
+//    public boolean isOnline() {
+//        ConnectivityManager connectivityManager = (ConnectivityManager)
+//                getSystemService(this.CONNECTIVITY_SERVICE);
+//        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+//        return (networkInfo != null && networkInfo.isConnected());
+//    }
 
 
 
@@ -142,14 +155,23 @@ public class MainActivity extends AppCompatActivity {
         }
 
 
-
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
 
         @Override
-        protected void onPostExecute(List<ItemModel> result){
+        protected void onPostExecute(final List<ItemModel> result){
             super.onPostExecute(result);
 //            textView.setText(result);
             ItemAdapter itemAdapter = new ItemAdapter (getApplicationContext(),R.layout.item_layout,result);
             lsItem.setAdapter(itemAdapter);
+            lsItem.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    Toast.makeText(getApplicationContext(),result.get(position).getTitle(),Toast.LENGTH_SHORT).show();
+                }
+            });
 
         }
     }
@@ -169,31 +191,64 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
 
-            if(convertView == null){
-                convertView = inflater.inflate(R.layout.item_layout,null);
-            }
-            TextView textViewTitle;
-            TextView textViewResult;
-            ImageView imageView;
+            ViewHolder holder = null;
 
-            textViewTitle = (TextView)convertView.findViewById(R.id.textViewTitle);
-            textViewResult = (TextView)convertView.findViewById(R.id.textViewResult);
-            imageView = (ImageView)convertView.findViewById(R.id.imageView);
+            if(convertView == null){
+                holder = new ViewHolder();
+                convertView = inflater.inflate(resource,null);
+                holder.textViewTitle = (TextView)convertView.findViewById(R.id.textViewTitle);
+                holder.textViewResult = (TextView)convertView.findViewById(R.id.textViewResult);
+                holder.imageView = (ImageView)convertView.findViewById(R.id.imageView);
+                convertView.setTag(holder);
+            }else{
+                holder = (ViewHolder)convertView.getTag();
+            }
+
+
+            final ProgressBar progressBar = (ProgressBar)convertView.findViewById(R.id.progressBar);
 
             // Then later, when you want to display image
-            ImageLoader.getInstance().displayImage(itemModelList.get(position).getMainPhoto().getUrl(), imageView); // Default options will be used
+            ImageLoader.getInstance().displayImage(itemModelList.get(position).getMainPhoto().getUrl(), holder.imageView, new ImageLoadingListener() {
+                @Override
+                public void onLoadingStarted(String imageUri, View view) {
+                    progressBar.setVisibility(View.VISIBLE);
 
-            textViewTitle.setText(itemModelList.get(position).getTitle());
-            textViewResult.setText(itemModelList.get(position).getMainPhoto().getUrl());
+                }
+
+                @Override
+                public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
+                    progressBar.setVisibility(View.GONE);
+                }
+
+                @Override
+                public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+                    progressBar.setVisibility(View.GONE);
+                }
+
+                @Override
+                public void onLoadingCancelled(String imageUri, View view) {
+                    progressBar.setVisibility(View.GONE);
+                }
+            });
+
+
+            holder.textViewTitle.setText(itemModelList.get(position).getTitle());
+            holder.textViewResult.setText("Wynik: ");
 
 
             return convertView;
 
         }
 
+         class ViewHolder{
+            private TextView textViewTitle;
+            private TextView textViewResult;
+            private ImageView imageView;
+        }
+
 
     }
 
-  
+
 }
 
