@@ -2,6 +2,7 @@ package com.example.maldini.quizapp;
 
 import android.app.FragmentTransaction;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -24,6 +25,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
@@ -113,11 +115,12 @@ public class MainActivity extends AppCompatActivity {
                 int count = parentObject.getInt("count");
 
                 List<ItemModel> itemModelList = new ArrayList<>();
-
+                Gson gson = new Gson();
                 for(int i =0;i<count;i++) {
                     JSONObject finalObject = parentArray.getJSONObject(i);
                     JSONObject childObject = new JSONObject(finalObject.getString("mainPhoto"));
-                    ItemModel itemModel = new ItemModel(finalObject.getString("title"),childObject.getString("url"));
+                    ItemModel itemModel = gson.fromJson(finalObject.toString(),ItemModel.class);
+//                    ItemModel itemModel = new ItemModel(finalObject.getString("title"),childObject.getString("url"));
 //                    ItemModel itemModel = new ItemModel(finalObject.getString("title"));
 
 
@@ -127,9 +130,9 @@ public class MainActivity extends AppCompatActivity {
                     result+= itemModel.getTitle() +"\n";
                     itemModelList.add(itemModel);
                 }
-//                ArrayList<QuizField> quizFields = QuizField.makeQuizFields(finalJSON);
 
-//                return quizFields.get(0).toString();
+
+
                 return itemModelList;
 
             } catch (MalformedURLException e) {
@@ -169,7 +172,10 @@ public class MainActivity extends AppCompatActivity {
             lsItem.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    Toast.makeText(getApplicationContext(),result.get(position).getTitle(),Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(getApplicationContext(),result.get(position).getTitle(),Toast.LENGTH_SHORT).show();
+                    Intent startIntent = new Intent(getApplicationContext(),SolutionActivity.class);
+                    startIntent.putExtra("com.talkingandroid.MESSAGE",result.get(position).getTitle());
+                    startActivity(startIntent);
                 }
             });
 
