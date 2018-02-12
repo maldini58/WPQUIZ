@@ -5,15 +5,28 @@ package com.example.maldini.quizapp;
  */
 public class Quiz {
     private boolean started;
+    private String title;
     private int questionNumber;
     private int wrongQuestionNumber;
     private int correctQuestionNumber;
     private int answeredQuestionNumber;
+    private double result;
 
-    public Quiz(int questionNumber, boolean started) {
+    public Quiz(String title,int questionNumber, boolean started) {
+        this.title = title;
         this.questionNumber = questionNumber;
         this.started=started;
         this.answeredQuestionNumber=0;
+        this.wrongQuestionNumber=0;
+        this.correctQuestionNumber=0;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public int getQuestionNumber() {
@@ -43,4 +56,13 @@ public class Quiz {
     public void setAnsweredQuestionNumber(int answeredQuestionNumber) {
         this.answeredQuestionNumber = answeredQuestionNumber;
     }
+
+    public double getResult() {
+        return result;
+    }
+
+    public void setResult(double result) {
+        this.result = result;
+    }
+
 }

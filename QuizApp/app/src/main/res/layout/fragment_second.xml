@@ -1,0 +1,65 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="600dp"
+    tools:context="com.example.maldini.quizapp.SecondFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center_horizontal|top">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="Brawo!"
+            android:id="@+id/textView"
+            android:layout_gravity="center_horizontal" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="Odpowiedziałeś na: "
+            android:id="@+id/textView2"
+            android:layout_gravity="center_horizontal"
+            android:paddingBottom="150dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="Large Text"
+            android:id="@+id/textViewPercentResult"
+            android:layout_gravity="center_horizontal" />
+    </LinearLayout>
+
+    <FrameLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="215dp"
+        android:layout_gravity="left|bottom"
+        android:weightSum="1">
+
+        <Button
+            android:layout_width="160dp"
+            android:layout_height="88dp"
+            android:text="Przejdź do listy quizów"
+            android:id="@+id/buttonExit"
+            android:layout_gravity="left" />
+
+        <Button
+            android:layout_width="160dp"
+            android:layout_height="88dp"
+            android:text="Rozwiąż jeszcze raz"
+            android:id="@+id/buttonReplay"
+            android:layout_gravity="top|bottom|right" />
+
+    </FrameLayout>
+
+</FrameLayout>
+
