@@ -29,7 +29,39 @@
         android:layout_centerHorizontal="true"
         android:layout_below="@+id/textViewTitle"
         android:max="5"
+        android:paddingBottom="30dp"
 
         />
+    <RadioGroup
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/solutionBar"
+        android:id="@+id/myRadioGroup">
+
+
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Poprawna odpowiedź"
+            android:id="@+id/radioButtonAnswer1" />
+
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Błędna odpowiedź"
+            android:id="@+id/radioButtonAnswer2" />
+
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Błędna odpowiedź"
+            android:id="@+id/radioButtonAnswer3" />
+
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Błędna odpowiedź"
+            android:id="@+id/radioButtonAnswer4" />
+    </RadioGroup>
 
 </RelativeLayout>
