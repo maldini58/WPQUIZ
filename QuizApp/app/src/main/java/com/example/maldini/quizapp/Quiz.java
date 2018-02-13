@@ -4,7 +4,8 @@ package com.example.maldini.quizapp;
  * Created by Maldini on 2018-02-12.
  */
 public class Quiz {
-    private boolean started;
+    private int id;
+    private int finished; // 1 - true, 0-false
     private String title;
     private int questionNumber;
     private int wrongQuestionNumber;
@@ -12,13 +13,35 @@ public class Quiz {
     private int answeredQuestionNumber;
     private double result;
 
-    public Quiz(String title,int questionNumber, boolean started) {
+    public Quiz(){};
+
+    public Quiz(String title,int questionNumber, int finished) {
         this.title = title;
         this.questionNumber = questionNumber;
-        this.started=started;
+        this.finished=finished;
         this.answeredQuestionNumber=0;
         this.wrongQuestionNumber=0;
         this.correctQuestionNumber=0;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setQuestionNumber(int questionNumber) {
+        this.questionNumber = questionNumber;
+    }
+
+    public int getFinished() {
+        return finished;
+    }
+
+    public void setFinished(int finished) {
+        this.finished = finished;
     }
 
     public String getTitle() {

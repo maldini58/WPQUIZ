@@ -1,6 +1,7 @@
 package com.example.maldini.quizapp;
 
 import android.app.FragmentTransaction;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -43,6 +44,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.sql.SQLException;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -52,6 +54,7 @@ public class MainActivity extends AppCompatActivity {
 
     TextView textView;
     ListView lsItem;
+    List<Quiz> quizesList;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,7 +75,9 @@ public class MainActivity extends AppCompatActivity {
             new JSONTask().execute("http://quiz.o2.pl/api/v1/quizzes/0/100");
 
 
-        }
+
+
+    }
 
 //    public boolean isOnline() {
 //        ConnectivityManager connectivityManager = (ConnectivityManager)
@@ -115,6 +120,7 @@ public class MainActivity extends AppCompatActivity {
                 int count = parentObject.getInt("count");
 
                 List<ItemModel> itemModelList = new ArrayList<>();
+                quizesList = new ArrayList<>();
                 Gson gson = new Gson();
                 for(int i =0;i<count;i++) {
                     JSONObject finalObject = parentArray.getJSONObject(i);
@@ -129,8 +135,28 @@ public class MainActivity extends AppCompatActivity {
 
                     result+= itemModel.getTitle() +"\n";
                     itemModelList.add(itemModel);
+                    quizesList.add(new Quiz(title,5,0));
                 }
 
+
+                QuizDbAdapter quizDbAdapter = new QuizDbAdapter(getApplicationContext());
+                try {
+                    quizDbAdapter.open();
+                    for(Quiz quiz:quizesList){
+                        ContentValues newValues = new ContentValues();
+                        newValues.put(QuizDbAdapter.TITLE,quiz.getTitle());
+                        newValues.put(QuizDbAdapter.FINISHED,quiz.getFinished());
+                        newValues.put(QuizDbAdapter.QUESTION_NUMBER,quiz.getQuestionNumber());
+                        newValues.put(QuizDbAdapter.CORRECT_QUESTION_NUMBER,quiz.getCorrectQuestionNumber());
+                        newValues.put(QuizDbAdapter.WRONG_QUESTION_NUMBER,quiz.getWrongQuestionNumber());
+                        newValues.put(QuizDbAdapter.ANSWERED_QUESTION_NUMBER,quiz.getAnsweredQuestionNumber());
+                        newValues.put(QuizDbAdapter.RESULT,quiz.getResult());
+
+                    }
+                    quizDbAdapter.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
 
 
                 return itemModelList;
@@ -166,7 +192,6 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(final List<ItemModel> result){
             super.onPostExecute(result);
-//            textView.setText(result);
             ItemAdapter itemAdapter = new ItemAdapter (getApplicationContext(),R.layout.item_layout,result);
             lsItem.setAdapter(itemAdapter);
             lsItem.setOnItemClickListener(new AdapterView.OnItemClickListener() {
