@@ -28,6 +28,9 @@ public class Quiz {
         this.result=result;
         this.id=counter;
         counter++;
+        if(counter>=100){
+            counter=0;
+        }
     }
 
     public Quiz(String title,int questionNumber, int finished, double result,int id) {

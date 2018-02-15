@@ -96,7 +96,7 @@ public class FirstFragment extends Fragment {
                     quiz.setAnsweredQuestionNumber(quiz.getAnsweredQuestionNumber() + 1);
                     try {
                         quizDbAdapter.open();
-                        quizDbAdapter.updateQuiz(quiz.getId(), quiz);
+                        quizDbAdapter.updateQuiz(getQuiz().getId(),getQuiz());
                         quizDbAdapter.close();
                     } catch (SQLException e) {
                         e.printStackTrace();
@@ -109,9 +109,8 @@ public class FirstFragment extends Fragment {
                         quiz.setResult(100 * quiz.getCorrectQuestionNumber() / quiz.getQuestionNumber());
                         try {
                             quizDbAdapter.open();
-//                            quizDbAdapter.updateQuiz(quiz.getId(),quiz);
-                            Quiz testQuiz = new Quiz("LOL",5,0,99,9999);
-//                            quizDbAdapter.updateQuiz(0, testQuiz);
+                            Quiz testQuiz = getQuiz();
+                            quizDbAdapter.updateQuiz(getQuiz().getId(),getQuiz());
 
                             quizDbAdapter.close();
                         } catch (SQLException e) {

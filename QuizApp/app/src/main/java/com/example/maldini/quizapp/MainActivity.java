@@ -58,7 +58,8 @@ public class MainActivity extends AppCompatActivity {
 
     ListView lsItem;
     List<Quiz> quizesList;
-    List<Integer> listResults = listResults = new ArrayList<>();
+    List<Integer> listResults = new ArrayList<>();
+    public List<Quiz> quizesResultList = new ArrayList<>();
     Context context;
     QuizDbAdapter quizDbAdapter;
     ItemAdapter itemAdapter;
@@ -94,26 +95,32 @@ public class MainActivity extends AppCompatActivity {
             listResults.clear();
 
         }
-        try {
-//            quizDbAdapter = new QuizDbAdapter(context);
-            quizDbAdapter.open();
-//            Quiz testQuiz = new Quiz("LOL",5,0,99,9999);
-//            quizDbAdapter.updateQuiz(0, testQuiz);
 
-            // TU!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        if(!quizesResultList.isEmpty()) {
+            quizesResultList.clear();
 
-            Cursor cursor = quizDbAdapter.getQuizes();
-            if(cursor.moveToFirst()){
-                do{
-                    Quiz quiz = quizDbAdapter.getQuizFromCursor(cursor);
-                    listResults.add((int) quiz.getId());
-                }while(cursor.moveToNext());
-            }
-            cursor.close();
-            quizDbAdapter.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
         }
+
+//        try {
+////            quizDbAdapter = new QuizDbAdapter(context);
+//            quizDbAdapter.open();
+////            Quiz testQuiz = new Quiz("LOL",5,0,99,9999);
+////            quizDbAdapter.updateQuiz(0, testQuiz);
+//
+//            // TU!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+//
+//            Cursor cursor = quizDbAdapter.getQuizes();
+//            if(cursor.moveToFirst()){
+//                do{
+//                    Quiz quiz = quizDbAdapter.getQuizFromCursor(cursor);
+//                    listResults.add((int) quiz.getResult());
+//                }while(cursor.moveToNext());
+//            }
+//            cursor.close();
+//            quizDbAdapter.close();
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
 
 
 
@@ -227,17 +234,15 @@ public class MainActivity extends AppCompatActivity {
 
 
                 }
-//                Quiz testQuiz = new Quiz("LOL", 5, 0, 99);
-////                testQuiz.setId(999999);
-//                quizDbAdapter.updateQuiz(0,testQuiz);
-//                quizDbAdapter.deleteQuiz(0);
+
 
 
                 Cursor cursor = quizDbAdapter.getQuizes();
                 if (cursor.moveToFirst()) {
                     do {
                         Quiz quiz = quizDbAdapter.getQuizFromCursor(cursor);
-                        listResults.add((int) quiz.getId());
+                        listResults.add((int) quiz.getResult());
+                        quizesResultList.add(quiz);
                     } while (cursor.moveToNext());
                 }
                 cursor.close();
@@ -247,7 +252,7 @@ public class MainActivity extends AppCompatActivity {
             }
 
 
-            itemAdapter = new ItemAdapter (getApplicationContext(),R.layout.item_layout,result,listResults);
+            itemAdapter = new ItemAdapter (getApplicationContext(),R.layout.item_layout,result);
 //                itemAdapter = new ItemAdapter(getApplicationContext(), R.layout.item_layout, result);
 
 
@@ -261,6 +266,7 @@ public class MainActivity extends AppCompatActivity {
 //                    Toast.makeText(getApplicationContext(),result.get(position).getTitle(),Toast.LENGTH_SHORT).show();
                         Intent startIntent = new Intent(getApplicationContext(), SolutionActivity.class);
                         startIntent.putExtra("com.talkingandroid.MESSAGE", result.get(position).getTitle());
+                        startIntent.putExtra("com.talkingandroid.MESSAGE_ID",quizesList.get(position).getId());
                         startActivity(startIntent);
                     }
                 });
@@ -282,14 +288,14 @@ public class MainActivity extends AppCompatActivity {
         private List<ItemModel> itemModelList;
         private int resource;
         private LayoutInflater inflater;
-        List<Integer> results;
 
-        public ItemAdapter(Context context, int resource, List<ItemModel> objects, List<Integer> results) {
+
+        public ItemAdapter(Context context, int resource, List<ItemModel> objects) {
             super(context, resource, objects);
             itemModelList = objects;
             this.resource = resource;
             inflater = (LayoutInflater)getSystemService(LAYOUT_INFLATER_SERVICE);
-            this.results=results;
+
 
         }
 
@@ -338,35 +344,10 @@ public class MainActivity extends AppCompatActivity {
 
 
             holder.textViewTitle.setText(itemModelList.get(position).getTitle());
-//            Cursor quizCursor = quizDbAdapter.getResults(itemModelList.get(position).getTitle());
-
-//            Quiz quiz = quizDbAdapter.getQuizFromCursor(quizCursor);
-//            holder.textViewResult.setText("Wynik: "+ quiz.getResult());
 
 
-//            if(cursor.moveToFirst()){
-//                do{
-////                    Quiz quiz = quizDbAdapter.getQuizFromCursor(cursor);
-//                }while(cursor.moveToNext());
-//            }
-//            cursor.close();
+            holder.textViewResult.setText("Wynik: " + quizesResultList.get(position).getResult());
 
-
-//            Quiz quiz = quizDbAdapter.getQuizFromCursor(cursor);
-
-
-
-//                Quiz quiz = quizDbAdapter.getQuizFromCursor(cursor);
-
-
-//            Quiz quiz = quizDbAdapter.getQuizFromCursor(cursor);
-
-            holder.textViewResult.setText("Wynik: " + results.get(position));
-//            holder.textViewResult.setText("Wynik: " + quizesList.get(position).getId());
-//            holder.textViewResult.setText("Wynik: " +quizDbAdapter.getTitle(itemModelList.get(position).getTitle()));
-//            cursor.moveToNext();
-//            listResults.clear();
-//            quizDbAdapter.close();
             return convertView;
 
         }

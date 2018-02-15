@@ -47,7 +47,7 @@ public class QuizDbAdapter {
 
     private static final String CREATE_TABLE_QUIZ =
             "create table "+ QUIZ_TABLE + " ("
-            + KEY_ROWID + " INTEGER,"
+            + KEY_ROWID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
             + TITLE + " text,"
             + FINISHED + " INTEGER,"
             +QUESTION_NUMBER + " INTEGER,"

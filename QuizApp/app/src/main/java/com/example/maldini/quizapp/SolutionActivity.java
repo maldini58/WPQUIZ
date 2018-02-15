@@ -35,9 +35,10 @@ public class SolutionActivity extends Activity {
         setContentView(R.layout.activity_solution);
         Intent intent = getIntent();
         String title = intent.getStringExtra("com.talkingandroid.MESSAGE");
+        int id = intent.getIntExtra("com.talkingandroid.MESSAGE_ID",-1);
         FragmentManager fragmentManager = getFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        quiz = new Quiz(title,5,0,0);
+        quiz = new Quiz(title,5,0,0,id);
 
 
             FirstFragment f1 = new FirstFragment();
