@@ -180,7 +180,7 @@ public class MainActivity extends AppCompatActivity {
 
                     result+= itemModel.getTitle() +"\n";
                     itemModelList.add(itemModel);
-                    quizesList.add(new Quiz(title,5,5,0));
+                    quizesList.add(new Quiz(title,5,0,0));
                 }
 
 
@@ -345,8 +345,11 @@ public class MainActivity extends AppCompatActivity {
 
             holder.textViewTitle.setText(itemModelList.get(position).getTitle());
 
-
-            holder.textViewResult.setText("Wynik: " + quizesResultList.get(position).getResult());
+            if(quizesResultList.get(position).getFinished()==0) {
+                holder.textViewResult.setText("Quiz rozwiązany w : " + quizesResultList.get(position).getAnsweredQuestionNumber()/quizesResultList.get(position).getQuestionNumber() + "%");
+            }else if(quizesResultList.get(position).getFinished()==1){
+                holder.textViewResult.setText("Ostatni wynik : " + quizesResultList.get(position).getCorrectQuestionNumber()+"/" + quizesResultList.get(position).getQuestionNumber()+ " "+quizesResultList.get(position).getResult() + "%");
+            }
 
             return convertView;
 

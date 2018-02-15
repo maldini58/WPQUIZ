@@ -38,7 +38,8 @@
         android:id="@+id/textViewResult"
 
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true" />
+        android:paddingLeft="20dp"
+         />
 
 
 </RelativeLayout>

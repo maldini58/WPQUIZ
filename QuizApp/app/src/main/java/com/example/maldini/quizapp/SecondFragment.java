@@ -1,6 +1,8 @@
 package com.example.maldini.quizapp;
 
 
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
 import android.app.Fragment;
@@ -44,6 +46,9 @@ public class SecondFragment extends Fragment {
         buttonExit = (Button)view.findViewById(R.id.buttonExit);
         buttonReplay = (Button)view.findViewById(R.id.buttonReplay);
 
+
+
+
         buttonExit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -56,9 +61,21 @@ public class SecondFragment extends Fragment {
             public void onClick(View v) {
                 Intent startIntent = new Intent(getActivity().getApplicationContext(),SolutionActivity.class);
                 getView().setVisibility(View.GONE);
-                startIntent.putExtra("com.talkingandroid.MESSAGE", quiz.getTitle());
-                startIntent.putExtra("com.talkingandroid.RESULT",quiz.getResult());
-                startActivity(startIntent);
+//                startIntent.putExtra("com.talkingandroid.MESSAGE", quiz.getTitle());
+//                startIntent.putExtra("com.talkingandroid.RESULT",quiz.getResult());
+//                startActivity(startIntent);
+
+                FragmentManager fragmentManager = getFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                quiz = new Quiz(quiz.getTitle(),5,0,0,quiz.getId());
+
+
+                FirstFragment f1 = new FirstFragment();
+                f1.setQuiz(quiz);
+                fragmentTransaction.add(R.id.fragment_container, f1);
+                fragmentTransaction.commit();
+
+
             }
         });
 
@@ -66,5 +83,7 @@ public class SecondFragment extends Fragment {
 
         return view;
     }
+
+
 
 }

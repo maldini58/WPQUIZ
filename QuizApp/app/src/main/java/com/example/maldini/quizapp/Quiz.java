@@ -21,7 +21,6 @@ public class Quiz {
     public Quiz(String title,int questionNumber, int finished, double result) {
         this.title = title;
         this.questionNumber = questionNumber;
-        this.finished=finished;
         this.answeredQuestionNumber=0;
         this.wrongQuestionNumber=0;
         this.correctQuestionNumber=0;
@@ -36,7 +35,6 @@ public class Quiz {
     public Quiz(String title,int questionNumber, int finished, double result,int id) {
         this.title = title;
         this.questionNumber = questionNumber;
-        this.finished=finished;
         this.answeredQuestionNumber=0;
         this.wrongQuestionNumber=0;
         this.correctQuestionNumber=0;

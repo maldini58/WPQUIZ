@@ -68,4 +68,9 @@ public class SolutionActivity extends Activity {
 
 
     }
+
+    @Override
+    public void onBackPressed() {
+        finish();
+    }
 }

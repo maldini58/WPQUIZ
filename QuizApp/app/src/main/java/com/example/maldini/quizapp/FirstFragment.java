@@ -68,7 +68,11 @@ public class FirstFragment extends Fragment {
         answer4 = (RadioButton) view.findViewById(R.id.radioButtonAnswer4);
 
         return view;
+
+
     }
+
+
 
     class ProgressTask extends AsyncTask<Integer, Integer, Integer> {
 
@@ -96,6 +100,7 @@ public class FirstFragment extends Fragment {
                     quiz.setAnsweredQuestionNumber(quiz.getAnsweredQuestionNumber() + 1);
                     try {
                         quizDbAdapter.open();
+                        getQuiz().setFinished(1);
                         quizDbAdapter.updateQuiz(getQuiz().getId(),getQuiz());
                         quizDbAdapter.close();
                     } catch (SQLException e) {
@@ -152,30 +157,12 @@ public class FirstFragment extends Fragment {
         protected void onProgressUpdate(Integer... progress) {
             progressBar.setProgress(progress[0]);
         }
+
+
     }
 
 
-//    ContentValues createNewValues(Quiz quiz, QuizDbAdapter quizDbAdapter) {
-//        try {
-//            quizDbAdapter.open();
-//            ContentValues newValues = new ContentValues();
-//            newValues.put(QuizDbAdapter.TITLE, quiz.getTitle());
-//            newValues.put(QuizDbAdapter.FINISHED, quiz.getFinished());
-//            newValues.put(QuizDbAdapter.RESULT, quiz.getResult());
-//            newValues.put(QuizDbAdapter.QUESTION_NUMBER, quiz.getQuestionNumber());
-//            newValues.put(QuizDbAdapter.WRONG_QUESTION_NUMBER, quiz.getWrongQuestionNumber());
-//            newValues.put(QuizDbAdapter.CORRECT_QUESTION_NUMBER, quiz.getCorrectQuestionNumber());
-//            newValues.put(QuizDbAdapter.ANSWERED_QUESTION_NUMBER, quiz.getAnsweredQuestionNumber());
-//            quizDbAdapter.insertQuiz(newValues);
-//            quizDbAdapter.close();
-//            return newValues;
-//
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
-//
-//        return null;
-//    }
+
 
 
 
