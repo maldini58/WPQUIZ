@@ -1,9 +1,11 @@
 package com.example.maldini.quizapp;
 
+import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -11,6 +13,7 @@ import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
+import android.support.v4.widget.SimpleCursorAdapter;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -52,14 +55,19 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
 
 
-    TextView textView;
+
     ListView lsItem;
     List<Quiz> quizesList;
+    List<Integer> listResults = listResults = new ArrayList<>();
+    Context context;
+    QuizDbAdapter quizDbAdapter;
+    ItemAdapter itemAdapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        context=this;
+        quizDbAdapter = new QuizDbAdapter(context);
         // Create default options which will be used for every
 //  displayImage(...) call if no options will be passed to this method
         DisplayImageOptions defaultOptions = new DisplayImageOptions.Builder().cacheInMemory(true).cacheOnDisk(true).build();
@@ -72,19 +80,49 @@ public class MainActivity extends AppCompatActivity {
 
 //        textView = (TextView)findViewById(R.id.textView);
 
-            new JSONTask().execute("http://quiz.o2.pl/api/v1/quizzes/0/100");
+
 
 
 
 
     }
 
-//    public boolean isOnline() {
-//        ConnectivityManager connectivityManager = (ConnectivityManager)
-//                getSystemService(this.CONNECTIVITY_SERVICE);
-//        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
-//        return (networkInfo != null && networkInfo.isConnected());
-//    }
+    @Override
+    protected void onResume(){
+        super.onResume();
+        if(!listResults.isEmpty()) {
+            listResults.clear();
+
+        }
+        try {
+//            quizDbAdapter = new QuizDbAdapter(context);
+            quizDbAdapter.open();
+//            Quiz testQuiz = new Quiz("LOL",5,0,99,9999);
+//            quizDbAdapter.updateQuiz(0, testQuiz);
+
+            // TU!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+            Cursor cursor = quizDbAdapter.getQuizes();
+            if(cursor.moveToFirst()){
+                do{
+                    Quiz quiz = quizDbAdapter.getQuizFromCursor(cursor);
+                    listResults.add((int) quiz.getId());
+                }while(cursor.moveToNext());
+            }
+            cursor.close();
+            quizDbAdapter.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+
+
+        new JSONTask().execute("http://quiz.o2.pl/api/v1/quizzes/0/100");
+
+    }
+
+
+
 
 
 
@@ -135,28 +173,11 @@ public class MainActivity extends AppCompatActivity {
 
                     result+= itemModel.getTitle() +"\n";
                     itemModelList.add(itemModel);
-                    quizesList.add(new Quiz(title,5,0));
+                    quizesList.add(new Quiz(title,5,5,0));
                 }
 
 
-                QuizDbAdapter quizDbAdapter = new QuizDbAdapter(getApplicationContext());
-                try {
-                    quizDbAdapter.open();
-                    for(Quiz quiz:quizesList){
-                        ContentValues newValues = new ContentValues();
-                        newValues.put(QuizDbAdapter.TITLE,quiz.getTitle());
-                        newValues.put(QuizDbAdapter.FINISHED,quiz.getFinished());
-                        newValues.put(QuizDbAdapter.QUESTION_NUMBER,quiz.getQuestionNumber());
-                        newValues.put(QuizDbAdapter.CORRECT_QUESTION_NUMBER,quiz.getCorrectQuestionNumber());
-                        newValues.put(QuizDbAdapter.WRONG_QUESTION_NUMBER,quiz.getWrongQuestionNumber());
-                        newValues.put(QuizDbAdapter.ANSWERED_QUESTION_NUMBER,quiz.getAnsweredQuestionNumber());
-                        newValues.put(QuizDbAdapter.RESULT,quiz.getResult());
 
-                    }
-                    quizDbAdapter.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
 
 
                 return itemModelList;
@@ -192,17 +213,66 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(final List<ItemModel> result){
             super.onPostExecute(result);
-            ItemAdapter itemAdapter = new ItemAdapter (getApplicationContext(),R.layout.item_layout,result);
-            lsItem.setAdapter(itemAdapter);
-            lsItem.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                    Toast.makeText(getApplicationContext(),result.get(position).getTitle(),Toast.LENGTH_SHORT).show();
-                    Intent startIntent = new Intent(getApplicationContext(),SolutionActivity.class);
-                    startIntent.putExtra("com.talkingandroid.MESSAGE",result.get(position).getTitle());
-                    startActivity(startIntent);
+
+
+
+
+            /////////////////////////////////////////////////
+            ;
+            try {
+                quizDbAdapter.open();
+                for (Quiz quiz : quizesList) {
+
+                    quizDbAdapter.insertQuiz(quiz);
+
+
                 }
-            });
+//                Quiz testQuiz = new Quiz("LOL", 5, 0, 99);
+////                testQuiz.setId(999999);
+//                quizDbAdapter.updateQuiz(0,testQuiz);
+//                quizDbAdapter.deleteQuiz(0);
+
+
+                Cursor cursor = quizDbAdapter.getQuizes();
+                if (cursor.moveToFirst()) {
+                    do {
+                        Quiz quiz = quizDbAdapter.getQuizFromCursor(cursor);
+                        listResults.add((int) quiz.getId());
+                    } while (cursor.moveToNext());
+                }
+                cursor.close();
+                quizDbAdapter.close();
+            }catch (SQLException e) {
+                e.printStackTrace();
+            }
+
+
+            itemAdapter = new ItemAdapter (getApplicationContext(),R.layout.item_layout,result,listResults);
+//                itemAdapter = new ItemAdapter(getApplicationContext(), R.layout.item_layout, result);
+
+
+
+
+
+                lsItem.setAdapter(itemAdapter);
+                lsItem.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                    Toast.makeText(getApplicationContext(),result.get(position).getTitle(),Toast.LENGTH_SHORT).show();
+                        Intent startIntent = new Intent(getApplicationContext(), SolutionActivity.class);
+                        startIntent.putExtra("com.talkingandroid.MESSAGE", result.get(position).getTitle());
+                        startActivity(startIntent);
+                    }
+                });
+
+
+
+
+
+            /////////////////////////////////////////////////
+
+
+
 
         }
     }
@@ -212,11 +282,15 @@ public class MainActivity extends AppCompatActivity {
         private List<ItemModel> itemModelList;
         private int resource;
         private LayoutInflater inflater;
-        public ItemAdapter(Context context, int resource, List<ItemModel> objects) {
+        List<Integer> results;
+
+        public ItemAdapter(Context context, int resource, List<ItemModel> objects, List<Integer> results) {
             super(context, resource, objects);
             itemModelList = objects;
             this.resource = resource;
             inflater = (LayoutInflater)getSystemService(LAYOUT_INFLATER_SERVICE);
+            this.results=results;
+
         }
 
         @Override
@@ -264,9 +338,35 @@ public class MainActivity extends AppCompatActivity {
 
 
             holder.textViewTitle.setText(itemModelList.get(position).getTitle());
-            holder.textViewResult.setText("Wynik: ");
+//            Cursor quizCursor = quizDbAdapter.getResults(itemModelList.get(position).getTitle());
+
+//            Quiz quiz = quizDbAdapter.getQuizFromCursor(quizCursor);
+//            holder.textViewResult.setText("Wynik: "+ quiz.getResult());
 
 
+//            if(cursor.moveToFirst()){
+//                do{
+////                    Quiz quiz = quizDbAdapter.getQuizFromCursor(cursor);
+//                }while(cursor.moveToNext());
+//            }
+//            cursor.close();
+
+
+//            Quiz quiz = quizDbAdapter.getQuizFromCursor(cursor);
+
+
+
+//                Quiz quiz = quizDbAdapter.getQuizFromCursor(cursor);
+
+
+//            Quiz quiz = quizDbAdapter.getQuizFromCursor(cursor);
+
+            holder.textViewResult.setText("Wynik: " + results.get(position));
+//            holder.textViewResult.setText("Wynik: " + quizesList.get(position).getId());
+//            holder.textViewResult.setText("Wynik: " +quizDbAdapter.getTitle(itemModelList.get(position).getTitle()));
+//            cursor.moveToNext();
+//            listResults.clear();
+//            quizDbAdapter.close();
             return convertView;
 
         }
@@ -280,6 +380,36 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+
+
+
+//    private List<Double> createListResults(QuizDbAdapter quizDbAdapter){
+//        List<Double> listResults = new ArrayList<>();
+//        Cursor quizCursor = quizDbAdapter.getQuizes();
+//        if(quizCursor.moveToFirst()){
+//          do {
+//              Quiz quiz = quizDbAdapter.getQuizFromCursor(quizCursor);
+//              listResults.add((double) quiz.getId());
+//          }while(quizCursor.moveToNext());
+//        }
+//
+//        quizCursor.close();
+//        return listResults;
+//    }
+
+
+    public ContentValues createNewContentValues(Quiz quiz){
+        ContentValues newValues = new ContentValues();
+        newValues.put(QuizDbAdapter.TITLE,quiz.getTitle());
+        newValues.put(QuizDbAdapter.FINISHED,quiz.getFinished());
+        newValues.put(QuizDbAdapter.RESULT, quiz.getResult());
+        newValues.put(QuizDbAdapter.QUESTION_NUMBER,quiz.getQuestionNumber());
+        newValues.put(QuizDbAdapter.WRONG_QUESTION_NUMBER,quiz.getWrongQuestionNumber());
+        newValues.put(QuizDbAdapter.CORRECT_QUESTION_NUMBER, quiz.getCorrectQuestionNumber());
+        newValues.put(QuizDbAdapter.ANSWERED_QUESTION_NUMBER, quiz.getAnsweredQuestionNumber());
+
+        return newValues;
+    }
 
 }
 

@@ -3,6 +3,7 @@ package com.example.maldini.quizapp;
 
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.ContentValues;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -16,6 +17,8 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.sql.SQLException;
 
 
 /**
@@ -42,8 +45,7 @@ public class FirstFragment extends Fragment {
     RadioButton answer2;
     RadioButton answer3;
     RadioButton answer4;
-
-
+    QuizDbAdapter quizDbAdapter;
 
 
     @Override
@@ -51,26 +53,27 @@ public class FirstFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_first, container, false);
 
-    textViewTitle = (TextView)view.findViewById(R.id.textViewTitle);
-    progressBar = (ProgressBar)view.findViewById(R.id.solutionBar);
-    textViewTitle.setText(quiz.getTitle());
-//    quiz = new Quiz(5,false);
-    new ProgressTask().execute();
+        textViewTitle = (TextView) view.findViewById(R.id.textViewTitle);
+        progressBar = (ProgressBar) view.findViewById(R.id.solutionBar);
+        textViewTitle.setText(quiz.getTitle());
+        quizDbAdapter = new QuizDbAdapter(getActivity().getApplicationContext());
+
+        new ProgressTask().execute();
 
 
-    radioGroup = (RadioGroup)view.findViewById(R.id.myRadioGroup);
-    answer1 = (RadioButton)view.findViewById(R.id.radioButtonAnswer1);
-    answer2 = (RadioButton)view.findViewById(R.id.radioButtonAnswer2);
-    answer3 = (RadioButton)view.findViewById(R.id.radioButtonAnswer3);
-    answer4 = (RadioButton)view.findViewById(R.id.radioButtonAnswer4);
+        radioGroup = (RadioGroup) view.findViewById(R.id.myRadioGroup);
+        answer1 = (RadioButton) view.findViewById(R.id.radioButtonAnswer1);
+        answer2 = (RadioButton) view.findViewById(R.id.radioButtonAnswer2);
+        answer3 = (RadioButton) view.findViewById(R.id.radioButtonAnswer3);
+        answer4 = (RadioButton) view.findViewById(R.id.radioButtonAnswer4);
 
-return view;
-}
+        return view;
+    }
 
-    class ProgressTask extends AsyncTask<Integer,Integer,Integer> {
+    class ProgressTask extends AsyncTask<Integer, Integer, Integer> {
 
         @Override
-        protected void onPostExecute(Integer result){
+        protected void onPostExecute(Integer result) {
             radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(RadioGroup group, int checkedId) {
@@ -78,24 +81,42 @@ return view;
 
                     if (checkedId == answer1.getId()) {
                         answer1.setChecked(false);
-                        quiz.setCorrectQuestionNumber(quiz.getCorrectQuestionNumber() +1);
+                        quiz.setCorrectQuestionNumber(quiz.getCorrectQuestionNumber() + 1);
                     } else if (checkedId == answer2.getId()) {
-                        quiz.setWrongQuestionNumber(quiz.getWrongQuestionNumber()+1);
+                        quiz.setWrongQuestionNumber(quiz.getWrongQuestionNumber() + 1);
                         answer2.setChecked(false);
                     } else if (checkedId == answer3.getId()) {
-                        quiz.setWrongQuestionNumber(quiz.getWrongQuestionNumber()+1);
+                        quiz.setWrongQuestionNumber(quiz.getWrongQuestionNumber() + 1);
                         answer3.setChecked(false);
                     } else if (checkedId == answer4.getId()) {
-                        quiz.setWrongQuestionNumber(quiz.getWrongQuestionNumber()+1);
+                        quiz.setWrongQuestionNumber(quiz.getWrongQuestionNumber() + 1);
                         answer4.setChecked(false);
                     }
 
-                    quiz.setAnsweredQuestionNumber(quiz.getAnsweredQuestionNumber()+1);
+                    quiz.setAnsweredQuestionNumber(quiz.getAnsweredQuestionNumber() + 1);
+                    try {
+                        quizDbAdapter.open();
+                        quizDbAdapter.updateQuiz(quiz.getId(), quiz);
+                        quizDbAdapter.close();
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+
                     progressBar.setProgress(quiz.getAnsweredQuestionNumber());
 
-                    if(quiz.getAnsweredQuestionNumber()==quiz.getQuestionNumber()){
+                    if (quiz.getAnsweredQuestionNumber() == quiz.getQuestionNumber()) {
 //                        Toast.makeText(getActivity().getApplicationContext(),"LOL",Toast.LENGTH_LONG).show();
-                        quiz.setResult(100*quiz.getCorrectQuestionNumber()/quiz.getQuestionNumber());
+                        quiz.setResult(100 * quiz.getCorrectQuestionNumber() / quiz.getQuestionNumber());
+                        try {
+                            quizDbAdapter.open();
+//                            quizDbAdapter.updateQuiz(quiz.getId(),quiz);
+                            Quiz testQuiz = new Quiz("LOL",5,0,99,9999);
+//                            quizDbAdapter.updateQuiz(0, testQuiz);
+
+                            quizDbAdapter.close();
+                        } catch (SQLException e) {
+                            e.printStackTrace();
+                        }
                         getView().setVisibility(View.GONE);
                         FragmentManager fragmentManager = getFragmentManager();
                         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -107,40 +128,55 @@ return view;
                     }
 
 
+
+
                 }
             });
 
         }
 
         @Override
-        protected void onPreExecute(){
-
-
+        protected void onPreExecute() {
 
 
         }
-
 
 
         @Override
         protected Integer doInBackground(Integer... params) {
 
 
-
-
-
             return 0;
         }
 
         @Override
-        protected void onProgressUpdate(Integer... progress){
+        protected void onProgressUpdate(Integer... progress) {
             progressBar.setProgress(progress[0]);
         }
     }
 
 
-
-
+//    ContentValues createNewValues(Quiz quiz, QuizDbAdapter quizDbAdapter) {
+//        try {
+//            quizDbAdapter.open();
+//            ContentValues newValues = new ContentValues();
+//            newValues.put(QuizDbAdapter.TITLE, quiz.getTitle());
+//            newValues.put(QuizDbAdapter.FINISHED, quiz.getFinished());
+//            newValues.put(QuizDbAdapter.RESULT, quiz.getResult());
+//            newValues.put(QuizDbAdapter.QUESTION_NUMBER, quiz.getQuestionNumber());
+//            newValues.put(QuizDbAdapter.WRONG_QUESTION_NUMBER, quiz.getWrongQuestionNumber());
+//            newValues.put(QuizDbAdapter.CORRECT_QUESTION_NUMBER, quiz.getCorrectQuestionNumber());
+//            newValues.put(QuizDbAdapter.ANSWERED_QUESTION_NUMBER, quiz.getAnsweredQuestionNumber());
+//            quizDbAdapter.insertQuiz(newValues);
+//            quizDbAdapter.close();
+//            return newValues;
+//
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
+//
+//        return null;
+//    }
 
 
 

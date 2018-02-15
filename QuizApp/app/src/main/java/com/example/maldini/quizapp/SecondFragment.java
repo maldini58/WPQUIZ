@@ -47,8 +47,7 @@ public class SecondFragment extends Fragment {
         buttonExit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent startIntent = new Intent(getActivity().getApplicationContext(),MainActivity.class);
-                startActivity(startIntent);
+                getActivity().finish();
             }
         });
 
@@ -57,10 +56,13 @@ public class SecondFragment extends Fragment {
             public void onClick(View v) {
                 Intent startIntent = new Intent(getActivity().getApplicationContext(),SolutionActivity.class);
                 getView().setVisibility(View.GONE);
-                startIntent.putExtra("com.talkingandroid.MESSAGE",quiz.getTitle());
+                startIntent.putExtra("com.talkingandroid.MESSAGE", quiz.getTitle());
+                startIntent.putExtra("com.talkingandroid.RESULT",quiz.getResult());
                 startActivity(startIntent);
             }
         });
+
+
 
         return view;
     }
