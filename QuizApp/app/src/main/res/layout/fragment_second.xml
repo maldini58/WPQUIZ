@@ -7,57 +7,57 @@
     <!-- TODO: Update blank fragment layout -->
 
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_gravity="center_horizontal|top">
+        android:layout_gravity="center_horizontal|top"
+        android:orientation="vertical">
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="Brawo!"
             android:id="@+id/textView"
-            android:layout_gravity="center_horizontal" />
-
-        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="Odpowiedziałeś na: "
-            android:id="@+id/textView2"
             android:layout_gravity="center_horizontal"
-            android:paddingBottom="150dp"/>
+            android:text="Brawo!"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
 
         <TextView
+            android:id="@+id/textView2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="Large Text"
+            android:layout_gravity="center_horizontal"
+            android:paddingBottom="150dp"
+            android:text="Odpowiedziałeś na: "
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <TextView
             android:id="@+id/textViewPercentResult"
-            android:layout_gravity="center_horizontal" />
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="Large Text"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
     </LinearLayout>
 
     <FrameLayout
-        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="215dp"
         android:layout_gravity="left|bottom"
+        android:orientation="horizontal"
         android:weightSum="1">
 
         <Button
+            android:id="@+id/buttonExit"
             android:layout_width="160dp"
             android:layout_height="88dp"
-            android:text="Przejdź do listy quizów"
-            android:id="@+id/buttonExit"
-            android:layout_gravity="left" />
+            android:layout_gravity="left"
+            android:text="Przejdź do listy quizów" />
 
         <Button
+            android:id="@+id/buttonReplay"
             android:layout_width="160dp"
             android:layout_height="88dp"
-            android:text="Rozwiąż jeszcze raz"
-            android:id="@+id/buttonReplay"
-            android:layout_gravity="top|bottom|right" />
+            android:layout_gravity="top|bottom|right"
+            android:text="Rozwiąż jeszcze raz" />
 
     </FrameLayout>
 

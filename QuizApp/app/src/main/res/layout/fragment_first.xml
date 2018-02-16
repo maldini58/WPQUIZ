@@ -5,57 +5,58 @@
     tools:context="com.example.maldini.quizapp.FirstFragment">
 
     <TextView
+        android:id="@+id/textViewTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Duża czcionka"
-        android:id="@+id/textViewTitle"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:paddingBottom="10dp"
-        />
+        android:text="Duża czcionka"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
     <ProgressBar
 
         android:id="@+id/solutionBar"
         style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="match_parent"
         android:layout_height="30dp"
-        android:layout_centerHorizontal="true"
         android:layout_below="@+id/textViewTitle"
+        android:layout_centerHorizontal="true"
         android:max="5"
         android:paddingBottom="30dp"
 
         />
+
     <RadioGroup
+        android:id="@+id/myRadioGroup"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/solutionBar"
-        android:id="@+id/myRadioGroup">
+        android:layout_below="@+id/solutionBar">
 
 
         <RadioButton
+            android:id="@+id/radioButtonAnswer1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Poprawna odpowiedź"
-            android:id="@+id/radioButtonAnswer1" />
+            android:text="Poprawna odpowiedź" />
 
         <RadioButton
+            android:id="@+id/radioButtonAnswer2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Błędna odpowiedź"
-            android:id="@+id/radioButtonAnswer2" />
+            android:text="Błędna odpowiedź" />
 
         <RadioButton
+            android:id="@+id/radioButtonAnswer3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Błędna odpowiedź"
-            android:id="@+id/radioButtonAnswer3" />
+            android:text="Błędna odpowiedź" />
 
         <RadioButton
+            android:id="@+id/radioButtonAnswer4"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Błędna odpowiedź"
-            android:id="@+id/radioButtonAnswer4" />
+            android:text="Błędna odpowiedź" />
     </RadioGroup>
 
 </RelativeLayout>

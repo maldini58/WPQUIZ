@@ -29,8 +29,6 @@ public class SecondFragment extends Fragment {
     }
 
 
-
-
     TextView textViewResult;
     Button buttonExit;
     Button buttonReplay;
@@ -41,12 +39,10 @@ public class SecondFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_second, container, false);
 
-        textViewResult = (TextView)view.findViewById(R.id.textViewPercentResult);
-        textViewResult.setText(quiz.getResult()+"%");
-        buttonExit = (Button)view.findViewById(R.id.buttonExit);
-        buttonReplay = (Button)view.findViewById(R.id.buttonReplay);
-
-
+        textViewResult = (TextView) view.findViewById(R.id.textViewPercentResult);
+        textViewResult.setText(quiz.getResult() + "%");
+        buttonExit = (Button) view.findViewById(R.id.buttonExit);
+        buttonReplay = (Button) view.findViewById(R.id.buttonReplay);
 
 
         buttonExit.setOnClickListener(new View.OnClickListener() {
@@ -59,15 +55,10 @@ public class SecondFragment extends Fragment {
         buttonReplay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent startIntent = new Intent(getActivity().getApplicationContext(),SolutionActivity.class);
                 getView().setVisibility(View.GONE);
-//                startIntent.putExtra("com.talkingandroid.MESSAGE", quiz.getTitle());
-//                startIntent.putExtra("com.talkingandroid.RESULT",quiz.getResult());
-//                startActivity(startIntent);
-
                 FragmentManager fragmentManager = getFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                quiz = new Quiz(quiz.getTitle(),5,0,0,quiz.getId());
+                quiz = new Quiz(quiz.getTitle(), 5, 0, 0, quiz.getId());
 
 
                 FirstFragment f1 = new FirstFragment();
@@ -80,10 +71,8 @@ public class SecondFragment extends Fragment {
         });
 
 
-
         return view;
     }
-
 
 
 }

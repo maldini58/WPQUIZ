@@ -55,7 +55,6 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
 
 
-
     ListView lsItem;
     List<Quiz> quizesList;
     List<Integer> listResults = new ArrayList<>();
@@ -63,11 +62,12 @@ public class MainActivity extends AppCompatActivity {
     Context context;
     QuizDbAdapter quizDbAdapter;
     ItemAdapter itemAdapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        context=this;
+        context = this;
         quizDbAdapter = new QuizDbAdapter(context);
         // Create default options which will be used for every
 //  displayImage(...) call if no options will be passed to this method
@@ -76,27 +76,22 @@ public class MainActivity extends AppCompatActivity {
         ImageLoader.getInstance().init(config); // Do it on Application start
 
 
-
-        lsItem = (ListView)findViewById(R.id.lvItems);
+        lsItem = (ListView) findViewById(R.id.lvItems);
 
 //        textView = (TextView)findViewById(R.id.textView);
-
-
-
-
 
 
     }
 
     @Override
-    protected void onResume(){
+    protected void onResume() {
         super.onResume();
-        if(!listResults.isEmpty()) {
+        if (!listResults.isEmpty()) {
             listResults.clear();
 
         }
 
-        if(!quizesResultList.isEmpty()) {
+        if (!quizesResultList.isEmpty()) {
             quizesResultList.clear();
 
         }
@@ -123,17 +118,12 @@ public class MainActivity extends AppCompatActivity {
 //        }
 
 
-
         new JSONTask().execute("http://quiz.o2.pl/api/v1/quizzes/0/100");
 
     }
 
 
-
-
-
-
-    public class JSONTask extends AsyncTask<String,String,List<ItemModel>>{
+    public class JSONTask extends AsyncTask<String, String, List<ItemModel>> {
 
         @Override
         protected List<ItemModel> doInBackground(String... params) {
@@ -153,7 +143,7 @@ public class MainActivity extends AppCompatActivity {
                 StringBuffer buffer = new StringBuffer();
 
                 String line = "";
-                String result ="";
+                String result = "";
                 while ((line = reader.readLine()) != null) {
                     buffer.append(line);
                 }
@@ -167,24 +157,19 @@ public class MainActivity extends AppCompatActivity {
                 List<ItemModel> itemModelList = new ArrayList<>();
                 quizesList = new ArrayList<>();
                 Gson gson = new Gson();
-                for(int i =0;i<count;i++) {
+                for (int i = 0; i < count; i++) {
                     JSONObject finalObject = parentArray.getJSONObject(i);
                     JSONObject childObject = new JSONObject(finalObject.getString("mainPhoto"));
-                    ItemModel itemModel = gson.fromJson(finalObject.toString(),ItemModel.class);
-//                    ItemModel itemModel = new ItemModel(finalObject.getString("title"),childObject.getString("url"));
-//                    ItemModel itemModel = new ItemModel(finalObject.getString("title"));
+                    ItemModel itemModel = gson.fromJson(finalObject.toString(), ItemModel.class);
 
 
                     String title = finalObject.getString("title");
                     String imageUrl = childObject.getString("url");
 
-                    result+= itemModel.getTitle() +"\n";
+                    result += itemModel.getTitle() + "\n";
                     itemModelList.add(itemModel);
-                    quizesList.add(new Quiz(title,5,0,0));
+                    quizesList.add(new Quiz(title, 5, 0, 0));
                 }
-
-
-
 
 
                 return itemModelList;
@@ -218,14 +203,10 @@ public class MainActivity extends AppCompatActivity {
         }
 
         @Override
-        protected void onPostExecute(final List<ItemModel> result){
+        protected void onPostExecute(final List<ItemModel> result) {
             super.onPostExecute(result);
 
 
-
-
-            /////////////////////////////////////////////////
-            ;
             try {
                 quizDbAdapter.open();
                 for (Quiz quiz : quizesList) {
@@ -234,7 +215,6 @@ public class MainActivity extends AppCompatActivity {
 
 
                 }
-
 
 
                 Cursor cursor = quizDbAdapter.getQuizes();
@@ -247,43 +227,31 @@ public class MainActivity extends AppCompatActivity {
                 }
                 cursor.close();
                 quizDbAdapter.close();
-            }catch (SQLException e) {
+            } catch (SQLException e) {
                 e.printStackTrace();
             }
 
 
-            itemAdapter = new ItemAdapter (getApplicationContext(),R.layout.item_layout,result);
-//                itemAdapter = new ItemAdapter(getApplicationContext(), R.layout.item_layout, result);
+            itemAdapter = new ItemAdapter(getApplicationContext(), R.layout.item_layout, result);
 
 
-
-
-
-                lsItem.setAdapter(itemAdapter);
-                lsItem.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            lsItem.setAdapter(itemAdapter);
+            lsItem.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 //                    Toast.makeText(getApplicationContext(),result.get(position).getTitle(),Toast.LENGTH_SHORT).show();
-                        Intent startIntent = new Intent(getApplicationContext(), SolutionActivity.class);
-                        startIntent.putExtra("com.talkingandroid.MESSAGE", result.get(position).getTitle());
-                        startIntent.putExtra("com.talkingandroid.MESSAGE_ID",quizesList.get(position).getId());
-                        startActivity(startIntent);
-                    }
-                });
-
-
-
-
-
-            /////////////////////////////////////////////////
-
-
+                    Intent startIntent = new Intent(getApplicationContext(), SolutionActivity.class);
+                    startIntent.putExtra("com.talkingandroid.MESSAGE", result.get(position).getTitle());
+                    startIntent.putExtra("com.talkingandroid.MESSAGE_ID", quizesList.get(position).getId());
+                    startActivity(startIntent);
+                }
+            });
 
 
         }
     }
 
-    public class ItemAdapter extends ArrayAdapter{
+    public class ItemAdapter extends ArrayAdapter {
 
         private List<ItemModel> itemModelList;
         private int resource;
@@ -294,7 +262,7 @@ public class MainActivity extends AppCompatActivity {
             super(context, resource, objects);
             itemModelList = objects;
             this.resource = resource;
-            inflater = (LayoutInflater)getSystemService(LAYOUT_INFLATER_SERVICE);
+            inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
 
 
         }
@@ -304,19 +272,19 @@ public class MainActivity extends AppCompatActivity {
 
             ViewHolder holder = null;
 
-            if(convertView == null){
+            if (convertView == null) {
                 holder = new ViewHolder();
-                convertView = inflater.inflate(resource,null);
-                holder.textViewTitle = (TextView)convertView.findViewById(R.id.textViewTitle);
-                holder.textViewResult = (TextView)convertView.findViewById(R.id.textViewResult);
-                holder.imageView = (ImageView)convertView.findViewById(R.id.imageView);
+                convertView = inflater.inflate(resource, null);
+                holder.textViewTitle = (TextView) convertView.findViewById(R.id.textViewTitle);
+                holder.textViewResult = (TextView) convertView.findViewById(R.id.textViewResult);
+                holder.imageView = (ImageView) convertView.findViewById(R.id.imageView);
                 convertView.setTag(holder);
-            }else{
-                holder = (ViewHolder)convertView.getTag();
+            } else {
+                holder = (ViewHolder) convertView.getTag();
             }
 
 
-            final ProgressBar progressBar = (ProgressBar)convertView.findViewById(R.id.progressBar);
+            final ProgressBar progressBar = (ProgressBar) convertView.findViewById(R.id.progressBar);
 
             // Then later, when you want to display image
             ImageLoader.getInstance().displayImage(itemModelList.get(position).getMainPhoto().getUrl(), holder.imageView, new ImageLoadingListener() {
@@ -345,17 +313,17 @@ public class MainActivity extends AppCompatActivity {
 
             holder.textViewTitle.setText(itemModelList.get(position).getTitle());
 
-            if(quizesResultList.get(position).getFinished()==0) {
-                holder.textViewResult.setText("Quiz rozwiązany w : " + quizesResultList.get(position).getAnsweredQuestionNumber()/quizesResultList.get(position).getQuestionNumber() + "%");
-            }else if(quizesResultList.get(position).getFinished()==1){
-                holder.textViewResult.setText("Ostatni wynik : " + quizesResultList.get(position).getCorrectQuestionNumber()+"/" + quizesResultList.get(position).getQuestionNumber()+ " "+quizesResultList.get(position).getResult() + "%");
+            if (quizesResultList.get(position).getFinished() == 0) {
+                holder.textViewResult.setText("Quiz rozwiązany w : " + quizesResultList.get(position).getAnsweredQuestionNumber() / quizesResultList.get(position).getQuestionNumber() + "%");
+            } else if (quizesResultList.get(position).getFinished() == 1) {
+                holder.textViewResult.setText("Ostatni wynik : " + quizesResultList.get(position).getCorrectQuestionNumber() + "/" + quizesResultList.get(position).getQuestionNumber() + " " + quizesResultList.get(position).getResult() + "%");
             }
 
             return convertView;
 
         }
 
-         class ViewHolder{
+        class ViewHolder {
             private TextView textViewTitle;
             private TextView textViewResult;
             private ImageView imageView;
@@ -365,30 +333,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-
-
-//    private List<Double> createListResults(QuizDbAdapter quizDbAdapter){
-//        List<Double> listResults = new ArrayList<>();
-//        Cursor quizCursor = quizDbAdapter.getQuizes();
-//        if(quizCursor.moveToFirst()){
-//          do {
-//              Quiz quiz = quizDbAdapter.getQuizFromCursor(quizCursor);
-//              listResults.add((double) quiz.getId());
-//          }while(quizCursor.moveToNext());
-//        }
-//
-//        quizCursor.close();
-//        return listResults;
-//    }
-
-
-    public ContentValues createNewContentValues(Quiz quiz){
+    public ContentValues createNewContentValues(Quiz quiz) {
         ContentValues newValues = new ContentValues();
-        newValues.put(QuizDbAdapter.TITLE,quiz.getTitle());
-        newValues.put(QuizDbAdapter.FINISHED,quiz.getFinished());
+        newValues.put(QuizDbAdapter.TITLE, quiz.getTitle());
+        newValues.put(QuizDbAdapter.FINISHED, quiz.getFinished());
         newValues.put(QuizDbAdapter.RESULT, quiz.getResult());
-        newValues.put(QuizDbAdapter.QUESTION_NUMBER,quiz.getQuestionNumber());
-        newValues.put(QuizDbAdapter.WRONG_QUESTION_NUMBER,quiz.getWrongQuestionNumber());
+        newValues.put(QuizDbAdapter.QUESTION_NUMBER, quiz.getQuestionNumber());
+        newValues.put(QuizDbAdapter.WRONG_QUESTION_NUMBER, quiz.getWrongQuestionNumber());
         newValues.put(QuizDbAdapter.CORRECT_QUESTION_NUMBER, quiz.getCorrectQuestionNumber());
         newValues.put(QuizDbAdapter.ANSWERED_QUESTION_NUMBER, quiz.getAnsweredQuestionNumber());
 

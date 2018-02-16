@@ -12,37 +12,38 @@ public class Quiz {
     private int correctQuestionNumber;
     private int answeredQuestionNumber;
     private double result;
-    static int counter =0;
+    static int counter = 0;
 
-    public Quiz(){};
+    public Quiz() {
+    }
 
 
 
-    public Quiz(String title,int questionNumber, int finished, double result) {
+
+    public Quiz(String title, int questionNumber, int finished, double result) {
         this.title = title;
         this.questionNumber = questionNumber;
-        this.answeredQuestionNumber=0;
-        this.wrongQuestionNumber=0;
-        this.correctQuestionNumber=0;
-        this.result=result;
-        this.id=counter;
+        this.answeredQuestionNumber = 0;
+        this.wrongQuestionNumber = 0;
+        this.correctQuestionNumber = 0;
+        this.result = result;
+        this.id = counter;
         counter++;
-        if(counter>=100){
-            counter=0;
+        if (counter >= 100) {
+            counter = 0;
         }
     }
 
-    public Quiz(String title,int questionNumber, int finished, double result,int id) {
+    public Quiz(String title, int questionNumber, int finished, double result, int id) {
         this.title = title;
         this.questionNumber = questionNumber;
-        this.answeredQuestionNumber=0;
-        this.wrongQuestionNumber=0;
-        this.correctQuestionNumber=0;
-        this.result=result;
-        this.id=id;
+        this.answeredQuestionNumber = 0;
+        this.wrongQuestionNumber = 0;
+        this.correctQuestionNumber = 0;
+        this.result = result;
+        this.id = id;
 
     }
-
 
 
     public int getId() {

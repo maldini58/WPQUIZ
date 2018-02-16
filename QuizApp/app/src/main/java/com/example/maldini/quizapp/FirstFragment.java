@@ -73,7 +73,6 @@ public class FirstFragment extends Fragment {
     }
 
 
-
     class ProgressTask extends AsyncTask<Integer, Integer, Integer> {
 
         @Override
@@ -101,7 +100,7 @@ public class FirstFragment extends Fragment {
                     try {
                         quizDbAdapter.open();
                         getQuiz().setFinished(1);
-                        quizDbAdapter.updateQuiz(getQuiz().getId(),getQuiz());
+                        quizDbAdapter.updateQuiz(getQuiz().getId(), getQuiz());
                         quizDbAdapter.close();
                     } catch (SQLException e) {
                         e.printStackTrace();
@@ -110,12 +109,12 @@ public class FirstFragment extends Fragment {
                     progressBar.setProgress(quiz.getAnsweredQuestionNumber());
 
                     if (quiz.getAnsweredQuestionNumber() == quiz.getQuestionNumber()) {
-//                        Toast.makeText(getActivity().getApplicationContext(),"LOL",Toast.LENGTH_LONG).show();
+
                         quiz.setResult(100 * quiz.getCorrectQuestionNumber() / quiz.getQuestionNumber());
                         try {
                             quizDbAdapter.open();
                             Quiz testQuiz = getQuiz();
-                            quizDbAdapter.updateQuiz(getQuiz().getId(),getQuiz());
+                            quizDbAdapter.updateQuiz(getQuiz().getId(), getQuiz());
 
                             quizDbAdapter.close();
                         } catch (SQLException e) {
@@ -130,8 +129,6 @@ public class FirstFragment extends Fragment {
                         fragmentTransaction.commit();
 
                     }
-
-
 
 
                 }
@@ -160,11 +157,6 @@ public class FirstFragment extends Fragment {
 
 
     }
-
-
-
-
-
 
 
 }
