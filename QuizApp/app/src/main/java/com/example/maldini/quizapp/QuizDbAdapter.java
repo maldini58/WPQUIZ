@@ -9,9 +9,7 @@ import android.util.Log;
 
 import java.sql.SQLException;
 
-/**
- * Created by Maldini on 2018-02-13.
- */
+
 public class QuizDbAdapter {
 
     private static final String DATABASE_NAME = "QUIZ_DATABASE.db";
@@ -115,7 +113,6 @@ public class QuizDbAdapter {
     }
 
     public boolean updateQuiz(int id, Quiz quiz) {
-//        String[] selectionArgs = {String.valueOf(id)};
         ContentValues newValues = new ContentValues();
 
         newValues.put(QuizDbAdapter.KEY_ROWID, quiz.getId());
