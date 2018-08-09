@@ -3,7 +3,7 @@ package com.example.maldini.quizapp;
 
 public class Quiz {
     private int id;
-    private int finished; // 1 - true, 0-false
+    private int finished;
     private String title;
     private int questionNumber;
     private int wrongQuestionNumber;

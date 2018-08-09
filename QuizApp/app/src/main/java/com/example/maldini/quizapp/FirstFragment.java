@@ -48,8 +48,6 @@ public class FirstFragment extends Fragment {
         textViewTitle.setText(quiz.getTitle());
         quizDbAdapter = new QuizDbAdapter(getActivity().getApplicationContext());
         new ProgressTask().execute();
-
-
         radioGroup = (RadioGroup) view.findViewById(R.id.myRadioGroup);
         answer1 = (RadioButton) view.findViewById(R.id.radioButtonAnswer1);
         answer2 = (RadioButton) view.findViewById(R.id.radioButtonAnswer2);
@@ -114,8 +112,6 @@ public class FirstFragment extends Fragment {
                         fragmentTransaction.commit();
 
                     }
-
-
                 }
             });
 
