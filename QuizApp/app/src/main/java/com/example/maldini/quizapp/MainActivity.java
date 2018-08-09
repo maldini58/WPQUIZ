@@ -69,8 +69,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         context = this;
         quizDbAdapter = new QuizDbAdapter(context);
-        // Create default options which will be used for every
-//  displayImage(...) call if no options will be passed to this method
+
         DisplayImageOptions defaultOptions = new DisplayImageOptions.Builder().cacheInMemory(true).cacheOnDisk(true).build();
         ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(getApplicationContext()).defaultDisplayImageOptions(defaultOptions).build();
         ImageLoader.getInstance().init(config); // Do it on Application start
@@ -78,7 +77,7 @@ public class MainActivity extends AppCompatActivity {
 
         lsItem = (ListView) findViewById(R.id.lvItems);
 
-//        textView = (TextView)findViewById(R.id.textView);
+
 
 
     }
@@ -96,26 +95,7 @@ public class MainActivity extends AppCompatActivity {
 
         }
 
-//        try {
-////            quizDbAdapter = new QuizDbAdapter(context);
-//            quizDbAdapter.open();
-////            Quiz testQuiz = new Quiz("LOL",5,0,99,9999);
-////            quizDbAdapter.updateQuiz(0, testQuiz);
-//
-//            // TU!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-//
-//            Cursor cursor = quizDbAdapter.getQuizes();
-//            if(cursor.moveToFirst()){
-//                do{
-//                    Quiz quiz = quizDbAdapter.getQuizFromCursor(cursor);
-//                    listResults.add((int) quiz.getResult());
-//                }while(cursor.moveToNext());
-//            }
-//            cursor.close();
-//            quizDbAdapter.close();
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
+
 
 
         new JSONTask().execute("http://quiz.o2.pl/api/v1/quizzes/0/100");
@@ -239,7 +219,7 @@ public class MainActivity extends AppCompatActivity {
             lsItem.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                    Toast.makeText(getApplicationContext(),result.get(position).getTitle(),Toast.LENGTH_SHORT).show();
+
                     Intent startIntent = new Intent(getApplicationContext(), SolutionActivity.class);
                     startIntent.putExtra("com.talkingandroid.MESSAGE", result.get(position).getTitle());
                     startIntent.putExtra("com.talkingandroid.MESSAGE_ID", quizesList.get(position).getId());
@@ -286,7 +266,7 @@ public class MainActivity extends AppCompatActivity {
 
             final ProgressBar progressBar = (ProgressBar) convertView.findViewById(R.id.progressBar);
 
-            // Then later, when you want to display image
+           
             ImageLoader.getInstance().displayImage(itemModelList.get(position).getMainPhoto().getUrl(), holder.imageView, new ImageLoadingListener() {
                 @Override
                 public void onLoadingStarted(String imageUri, View view) {
