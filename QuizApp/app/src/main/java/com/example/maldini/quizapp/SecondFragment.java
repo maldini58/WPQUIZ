@@ -13,9 +13,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 
-/**
- * A simple {@link Fragment} subclass.
- */
+
 public class SecondFragment extends Fragment {
 
     private Quiz quiz;
@@ -36,7 +34,7 @@ public class SecondFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+       
         View view = inflater.inflate(R.layout.fragment_second, container, false);
 
         textViewResult = (TextView) view.findViewById(R.id.textViewPercentResult);
