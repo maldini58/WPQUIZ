@@ -13,9 +13,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 
-/**
- * A simple {@link Fragment} subclass.
- */
+
 public class SecondFragment extends Fragment {
 
     private Quiz quiz;
@@ -28,7 +26,6 @@ public class SecondFragment extends Fragment {
         this.quiz = quiz;
     }
 
-
     TextView textViewResult;
     Button buttonExit;
     Button buttonReplay;
@@ -36,22 +33,17 @@ public class SecondFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_second, container, false);
-
         textViewResult = (TextView) view.findViewById(R.id.textViewPercentResult);
         textViewResult.setText(quiz.getResult() + "%");
         buttonExit = (Button) view.findViewById(R.id.buttonExit);
         buttonReplay = (Button) view.findViewById(R.id.buttonReplay);
-
-
         buttonExit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 getActivity().finish();
             }
         });
-
         buttonReplay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -59,14 +51,10 @@ public class SecondFragment extends Fragment {
                 FragmentManager fragmentManager = getFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 quiz = new Quiz(quiz.getTitle(), 5, 0, 0, quiz.getId());
-
-
                 FirstFragment f1 = new FirstFragment();
                 f1.setQuiz(quiz);
                 fragmentTransaction.add(R.id.fragment_container, f1);
                 fragmentTransaction.commit();
-
-
             }
         });
 

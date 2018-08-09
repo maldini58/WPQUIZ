@@ -1,8 +1,6 @@
 package com.example.maldini.quizapp;
 
-/**
- * Created by Maldini on 2018-02-12.
- */
+
 public class Quiz {
     private int id;
     private int finished; // 1 - true, 0-false
@@ -16,9 +14,6 @@ public class Quiz {
 
     public Quiz() {
     }
-
-
-
 
     public Quiz(String title, int questionNumber, int finished, double result) {
         this.title = title;

@@ -1,8 +1,5 @@
 package com.example.maldini.quizapp;
 
-/**
- * Created by Maldini on 2018-02-10.
- */
 public class ItemModel {
 
     private String title;

@@ -3,11 +3,8 @@ package com.example.maldini.quizapp;
 
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
-import android.content.ContentValues;
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,19 +13,12 @@ import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import java.sql.SQLException;
 
 
-/**
- * A simple {@link Fragment} subclass.
- */
 public class FirstFragment extends Fragment {
 
-
     private Quiz quiz;
-
 
     public Quiz getQuiz() {
         return quiz;
@@ -57,7 +47,6 @@ public class FirstFragment extends Fragment {
         progressBar = (ProgressBar) view.findViewById(R.id.solutionBar);
         textViewTitle.setText(quiz.getTitle());
         quizDbAdapter = new QuizDbAdapter(getActivity().getApplicationContext());
-
         new ProgressTask().execute();
 
 
@@ -80,8 +69,6 @@ public class FirstFragment extends Fragment {
             radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(RadioGroup group, int checkedId) {
-
-
                     if (checkedId == answer1.getId()) {
                         answer1.setChecked(false);
                         quiz.setCorrectQuestionNumber(quiz.getCorrectQuestionNumber() + 1);
@@ -95,7 +82,6 @@ public class FirstFragment extends Fragment {
                         quiz.setWrongQuestionNumber(quiz.getWrongQuestionNumber() + 1);
                         answer4.setChecked(false);
                     }
-
                     quiz.setAnsweredQuestionNumber(quiz.getAnsweredQuestionNumber() + 1);
                     try {
                         quizDbAdapter.open();
@@ -105,7 +91,6 @@ public class FirstFragment extends Fragment {
                     } catch (SQLException e) {
                         e.printStackTrace();
                     }
-
                     progressBar.setProgress(quiz.getAnsweredQuestionNumber());
 
                     if (quiz.getAnsweredQuestionNumber() == quiz.getQuestionNumber()) {
@@ -138,15 +123,11 @@ public class FirstFragment extends Fragment {
 
         @Override
         protected void onPreExecute() {
-
-
         }
 
 
         @Override
         protected Integer doInBackground(Integer... params) {
-
-
             return 0;
         }
 
