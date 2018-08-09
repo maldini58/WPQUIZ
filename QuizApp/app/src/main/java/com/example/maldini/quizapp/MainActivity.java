@@ -54,10 +54,21 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         context = this;
         quizDbAdapter = new QuizDbAdapter(context);
+<<<<<<< HEAD
+=======
+
+>>>>>>> 6789f01527baca4d6b6a4e3d66ef3ef6a961a000
         DisplayImageOptions defaultOptions = new DisplayImageOptions.Builder().cacheInMemory(true).cacheOnDisk(true).build();
         ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(getApplicationContext()).defaultDisplayImageOptions(defaultOptions).build();
         ImageLoader.getInstance().init(config);
         lsItem = (ListView) findViewById(R.id.lvItems);
+<<<<<<< HEAD
+=======
+
+
+
+
+>>>>>>> 6789f01527baca4d6b6a4e3d66ef3ef6a961a000
     }
 
     @Override
@@ -69,6 +80,13 @@ public class MainActivity extends AppCompatActivity {
         if (!quizesResultList.isEmpty()) {
             quizesResultList.clear();
         }
+<<<<<<< HEAD
+=======
+
+
+
+
+>>>>>>> 6789f01527baca4d6b6a4e3d66ef3ef6a961a000
         new JSONTask().execute("http://quiz.o2.pl/api/v1/quizzes/0/100");
     }
 
@@ -166,6 +184,10 @@ public class MainActivity extends AppCompatActivity {
             lsItem.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+<<<<<<< HEAD
+=======
+
+>>>>>>> 6789f01527baca4d6b6a4e3d66ef3ef6a961a000
                     Intent startIntent = new Intent(getApplicationContext(), SolutionActivity.class);
                     startIntent.putExtra("com.talkingandroid.MESSAGE", result.get(position).getTitle());
                     startIntent.putExtra("com.talkingandroid.MESSAGE_ID", quizesList.get(position).getId());
@@ -203,6 +225,11 @@ public class MainActivity extends AppCompatActivity {
                 holder = (ViewHolder) convertView.getTag();
             }
             final ProgressBar progressBar = (ProgressBar) convertView.findViewById(R.id.progressBar);
+<<<<<<< HEAD
+=======
+
+           
+>>>>>>> 6789f01527baca4d6b6a4e3d66ef3ef6a961a000
             ImageLoader.getInstance().displayImage(itemModelList.get(position).getMainPhoto().getUrl(), holder.imageView, new ImageLoadingListener() {
 
                 @Override

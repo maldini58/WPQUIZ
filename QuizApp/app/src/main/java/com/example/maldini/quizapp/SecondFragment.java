@@ -33,6 +33,10 @@ public class SecondFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+<<<<<<< HEAD
+=======
+       
+>>>>>>> 6789f01527baca4d6b6a4e3d66ef3ef6a961a000
         View view = inflater.inflate(R.layout.fragment_second, container, false);
         textViewResult = (TextView) view.findViewById(R.id.textViewPercentResult);
         textViewResult.setText(quiz.getResult() + "%");
